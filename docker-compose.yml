@@ -6,6 +6,7 @@ services:
       - "3001:3001"
     volumes:
       - /volumes/pi-uptime:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: always
 
     labels:
