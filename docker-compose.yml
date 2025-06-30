@@ -2,8 +2,23 @@ services:
   uptime-kuma:
     image: louislam/uptime-kuma:latest
     container_name: uptime-kuma
-    restart: always
     ports:
       - "3001:3001"
     volumes:
       - /volumes/pi-uptime:/app/data
+    restart: always
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pihole.rule=Host(`kuma.sergdev.me`,`kuma.home.sergdev.me`)"
+      - "traefik.http.routers.pihole.entrypoints=websecure"
+      - "traefik.http.routers.pihole.tls=true"
+      - "traefik.http.services.pihole.loadbalancer.server.port=3001"
+
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    name: traefik_proxy
+    external: true
